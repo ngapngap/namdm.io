@@ -1,17 +1,222 @@
-meta(name="viewport" content="width=device-width, initial-scale=1.0")
-#app.chatbox
-	.colorPanel(:style='{display: colorPanelShown ? "flex":"none",opacity: colorPanelShown ? "flex":"none"}')
-		.colorPanel__colorSlot(v-for='color in colors')
-			.colorPanel__color(:style='{background: color}',@click='setColor(color)')
-	.chatbox__header
-		.chatbox__headerText BHXH SUPPORT CHATBOT
-			.chatbox__onlineDot
-		.chatbox__button(v-on:click='colorPanelShown = !colorPanelShown')
-	.chatbox__messages
-		.chatbox__messageBox(v-for='message in messages',:class='{"chatbox__messageBox--primary": message.primary}')
-			.chatbox__message(:class='{"chatbox__message--primary": message.primary}',:style='{background: message.primary ? chatColor:"inital"}') {{message.text}}
-				.chatbox__tooltip.chatbox__tooltip--left {{message.date}}
-	.chatbox__inputPanel
-		input.chatbox__input(v-model='newMessage',@keyup.enter='send',placeholder='Aa')
-		.chatbox__tooltip.chatbox__tooltip--bottom(:style='{opacity: (newMessage.length > 2 && !this.tutorialSeen) ? 0.7:0}') Press enter to send the message
-		//.chatbox__button +
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BHXH Support Chatbot</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f4f4f4;
+      font-family: Arial, sans-serif;
+    }
+
+    #app {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .chatbox__header {
+      background: #0084ff;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .chatbox__headerText {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .chatbox__onlineDot {
+      width: 10px;
+      height: 10px;
+      background: #0f0;
+      border-radius: 50%;
+      margin-left: 10px;
+      display: inline-block;
+    }
+
+    .chatbox__button {
+      cursor: pointer;
+      font-size: 20px;
+      background: transparent;
+      border: none;
+      color: white;
+    }
+
+    .colorPanel {
+      display: none;
+      flex-wrap: wrap;
+      padding: 10px;
+      background: #eee;
+      justify-content: center;
+    }
+
+    .colorPanel__colorSlot {
+      margin: 5px;
+    }
+
+    .colorPanel__color {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #ccc;
+    }
+
+    .chatbox__messages {
+      height: 300px;
+      overflow-y: auto;
+      padding: 15px;
+      background: #fafafa;
+    }
+
+    .chatbox__messageBox {
+      margin-bottom: 10px;
+    }
+
+    .chatbox__message {
+      display: inline-block;
+      padding: 10px 15px;
+      border-radius: 15px;
+      max-width: 70%;
+      position: relative;
+    }
+
+    .chatbox__message--primary {
+      background: #0084ff;
+      color: white;
+      margin-left: auto;
+    }
+
+    .chatbox__messageBox--primary {
+      text-align: right;
+    }
+
+    .chatbox__tooltip {
+      font-size: 10px;
+      color: #666;
+      margin-top: 3px;
+    }
+
+    .chatbox__inputPanel {
+      display: flex;
+      border-top: 1px solid #ddd;
+      padding: 10px;
+    }
+
+    .chatbox__input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .chatbox__tooltip--bottom {
+      font-size: 10px;
+      color: #999;
+      margin-left: 10px;
+      align-self: center;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <div class="colorPanel" id="colorPanel">
+    <div class="colorPanel__colorSlot">
+      <div class="colorPanel__color" style="background: #0084ff;" onclick="setColor('#0084ff')"></div>
+    </div>
+    <div class="colorPanel__colorSlot">
+      <div class="colorPanel__color" style="background: #28a745;" onclick="setColor('#28a745')"></div>
+    </div>
+    <div class="colorPanel__colorSlot">
+      <div class="colorPanel__color" style="background: #ffc107;" onclick="setColor('#ffc107')"></div>
+    </div>
+  </div>
+
+  <div class="chatbox__header">
+    <div class="chatbox__headerText">
+      BHXH SUPPORT CHATBOT <span class="chatbox__onlineDot"></span>
+    </div>
+    <button class="chatbox__button" onclick="toggleColorPanel()">🎨</button>
+  </div>
+
+  <div class="chatbox__messages" id="messages"></div>
+
+  <div class="chatbox__inputPanel">
+    <input type="text" class="chatbox__input" id="userInput" placeholder="Aa" onkeyup="handleEnter(event)" />
+    <div class="chatbox__tooltip--bottom" id="hint">Nhấn Enter để gửi tin nhắn</div>
+  </div>
+</div>
+
+<script>
+  let messages = [];
+  let chatColor = '#0084ff';
+  const webhookURL = "https://your-n8n-server.com/webhook/chatbot"; // 🔁 Thay bằng webhook thực
+
+  function toggleColorPanel() {
+    const panel = document.getElementById("colorPanel");
+    panel.style.display = panel.style.display === "flex" ? "none" : "flex";
+  }
+
+  function setColor(color) {
+    chatColor = color;
+    toggleColorPanel();
+  }
+
+  function appendMessage(text, primary = false) {
+    const box = document.createElement("div");
+    box.className = "chatbox__messageBox" + (primary ? " chatbox__messageBox--primary" : "");
+    const bubble = document.createElement("div");
+    bubble.className = "chatbox__message" + (primary ? " chatbox__message--primary" : "");
+    bubble.style.background = primary ? chatColor : "#F1F0F0";
+    bubble.innerText = text;
+    const tooltip = document.createElement("div");
+    tooltip.className = "chatbox__tooltip";
+    tooltip.innerText = new Date().toLocaleTimeString();
+    box.appendChild(bubble);
+    box.appendChild(tooltip);
+    document.getElementById("messages").appendChild(box);
+    box.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function handleEnter(e) {
+    if (e.key === "Enter") {
+      send();
+    }
+  }
+
+  async function send() {
+    const input = document.getElementById("userInput");
+    const msg = input.value.trim();
+    if (!msg) return;
+    appendMessage(msg, true);
+    input.value = "";
+
+    try {
+      const res = await fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg })
+      });
+      const data = await res.json();
+      appendMessage(data.reply || "🤖 Không có phản hồi.");
+    } catch (err) {
+      appendMessage("⚠️ Lỗi kết nối tới server.");
+      console.error(err);
+    }
+  }
+</script>
+
+</body>
+</html>
