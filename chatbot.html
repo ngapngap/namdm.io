@@ -180,29 +180,42 @@
       send();
     }
   }
+  const sessionId = localStorage.getItem("chat_session") || (() => {
+  const sid = "sid-" + Math.random().toString(36).substring(2, 10);
+  localStorage.setItem("chat_session", sid);
+  return sid;
+})();
+
   async function send() {
-    const input = document.getElementById("userInput");
-    const msg = input.value.trim();
-    if (!msg) return;
-    appendMessage(msg, true);
-    input.value = "";
-    try {
-      const res = await fetch(webhookURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg })
-      });
-      if (!res.ok) {
-        appendMessage("⚠️ Lỗi kết nối tới server.");
-        return;
-      }
-      const data = await res.json();
-      appendMessage(data.reply || "🤖 Không có phản hồi.");
-    } catch (err) {
+  const input = document.getElementById("userInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  appendMessage(msg, true);
+  input.value = "";
+
+  try {
+    const res = await fetch(webhookURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: msg,
+        sessionId: sessionId  // ✅ Gửi session ID cùng message
+      })
+    });
+
+    if (!res.ok) {
       appendMessage("⚠️ Lỗi kết nối tới server.");
-      console.error(err);
+      return;
     }
+
+    const data = await res.json();
+    appendMessage(data.reply || "🤖 Không có phản hồi.");
+  } catch (err) {
+    appendMessage("⚠️ Lỗi kết nối tới server.");
+    console.error(err);
   }
+}
 </script>
 </body>
 </html>
