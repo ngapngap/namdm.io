@@ -2,10 +2,62 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Nam Chatbot</title>
+  <title>BHXH SUPPORT CHATBOT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: sans-serif; background: #f7f7f7; padding: 20px; }
+    #chatbox { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .msg { margin-bottom: 10px; }
+    .user { text-align: right; color: blue; }
+    .bot { text-align: left; color: green; }
+    input[type="text"] { width: 80%; padding: 8px; }
+    button { padding: 8px 12px; }
+  </style>
 </head>
-<body style="text-align:center; font-family:sans-serif; padding:50px;">
-  <h1>🤖 NamChatbot</h1>
-  <p>Xin chào! Trang chatbot sẽ được phát triển ở đây.</p>
+<body>
+
+<div id="chatbox">
+  <div id="messages"></div>
+  <input type="text" id="userInput" placeholder="Nhập tin nhắn..." />
+  <button onclick="sendMessage()">Gửi</button>
+</div>
+
+<script>
+  const webhookURL = "https://your-n8n-server.com/webhook/chatbot"; // 👉 Thay bằng webhook thật của bạn
+
+  async function sendMessage() {
+    const input = document.getElementById("userInput");
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage(message, 'user');
+    input.value = '';
+
+    try {
+      const res = await fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: message })
+      });
+
+      const data = await res.json(); // hoặc res.text() tùy backend
+      appendMessage(data.reply || data, 'bot');
+
+    } catch (err) {
+      appendMessage("⚠️ Lỗi khi gửi tin nhắn.", 'bot');
+      console.error(err);
+    }
+  }
+
+  function appendMessage(text, sender) {
+    const messages = document.getElementById("messages");
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `msg ${sender}`;
+    msgDiv.textContent = text;
+    messages.appendChild(msgDiv);
+    messages.scrollTop = messages.scrollHeight;
+  }
+</script>
+
 </body>
 </html>
