@@ -3,330 +3,588 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>NamTools - Bộ công cụ online</title>
+  <title>NamTools Blog - Bộ công cụ & Hướng dẫn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      --n8n-gradient: linear-gradient(135deg, #ff6d6d 0%, #ff4757 100%);
-      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      --text-primary: #2d3748;
-      --text-secondary: #718096;
-      --white: #ffffff;
-      --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.07);
-      --shadow-medium: 0 10px 25px rgba(0, 0, 0, 0.1);
-      --shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.15);
-      --border-radius: 16px;
-      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --primary-color: #2563eb;
+      --secondary-color: #64748b;
+      --accent-color: #0ea5e9;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-accent: #f1f5f9;
+      --border-color: #e2e8f0;
+      --border-light: #f1f5f9;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --border-radius: 8px;
     }
 
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
     body {
-      margin: 0;
-      font-family: var(--font-primary);
-      background: var(--bg-gradient);
+      font-family: var(--font-family);
+      line-height: 1.7;
       color: var(--text-primary);
-      line-height: 1.6;
-      min-height: 100vh;
+      background: var(--bg-secondary);
     }
 
-    header {
-      background: var(--primary-gradient);
-      color: var(--white);
-      padding: 4rem 2rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    header::before {
-      content: '';
-      position: absolute;
+    /* Header */
+    .header {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
       top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.8" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-      pointer-events: none;
+      z-index: 100;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 3.5rem;
-      font-weight: 700;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-      position: relative;
-      z-index: 1;
-    }
-
-    header p {
-      font-size: 1.3rem;
-      margin-top: 1rem;
-      opacity: 0.9;
-      position: relative;
-      z-index: 1;
-      font-weight: 300;
-    }
-
-    main {
+    .header-container {
       max-width: 1200px;
-      margin: -3rem auto 0;
-      padding: 0 2rem 4rem;
-      position: relative;
-      z-index: 2;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
     }
 
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
       gap: 2rem;
-      margin-top: 4rem;
     }
 
-    .tool-card {
-      background: var(--white);
+    .nav-menu a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+      color: var(--primary-color);
+    }
+
+    /* Main Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 3rem;
+    }
+
+    /* Main Content */
+    .main-content {
+      background: var(--bg-primary);
       border-radius: var(--border-radius);
-      padding: 2.5rem;
-      box-shadow: var(--shadow-light);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+
+    .hero-section {
+      padding: 3rem;
+      border-bottom: 1px solid var(--border-light);
       text-align: center;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.2);
-      backdrop-filter: blur(10px);
     }
 
-    .tool-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s;
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
     }
 
-    .tool-card:hover::before {
-      left: 100%;
+    .hero-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
     }
 
-    .tool-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: var(--shadow-heavy);
+    .tools-section {
+      padding: 2rem 3rem 3rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Blog-style Tool Cards */
+    .tool-post {
+      border-bottom: 1px solid var(--border-light);
+      padding: 2rem 0;
+      transition: all 0.3s ease;
+    }
+
+    .tool-post:last-child {
+      border-bottom: none;
+    }
+
+    .tool-post:hover {
+      background: var(--bg-accent);
+      margin: 0 -1rem;
+      padding: 2rem 1rem;
+      border-radius: var(--border-radius);
+    }
+
+    .tool-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
 
     .tool-icon {
-      font-size: 3rem;
-      margin-bottom: 1.5rem;
-      background: var(--accent-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      display: block;
+      width: 48px;
+      height: 48px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
     }
 
-    .tool-icon.n8n-icon {
-      background: var(--n8n-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .tool-card h3 {
-      margin: 0 0 1rem 0;
-      font-size: 1.4rem;
+    .tool-content h3 {
+      font-size: 1.3rem;
       font-weight: 600;
+      margin-bottom: 0.5rem;
       color: var(--text-primary);
     }
 
-    .tool-card p {
+    .tool-meta {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-description {
       color: var(--text-secondary);
-      margin: 0 0 1.5rem 0;
-      font-size: 0.95rem;
-      line-height: 1.5;
+      margin-bottom: 1rem;
+      line-height: 1.6;
     }
 
     .tool-link {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: var(--primary-gradient);
-      color: var(--white);
+      color: var(--primary-color);
       text-decoration: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 25px;
       font-weight: 500;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--primary-color);
+      border-radius: var(--border-radius);
       transition: all 0.3s ease;
-      box-shadow: var(--shadow-light);
+      font-size: 0.9rem;
     }
 
     .tool-link:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
+      background: var(--primary-color);
+      color: white;
     }
 
-    .tool-link.n8n-link {
-      background: var(--n8n-gradient);
+    .tool-link.external {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: white;
     }
 
-    .coming-soon {
-      opacity: 0.6;
-      pointer-events: none;
+    .tool-link.external:hover {
+      background: #0284c7;
+      border-color: #0284c7;
     }
 
-    .coming-soon .tool-link {
-      background: var(--text-secondary);
+    .tool-link.disabled {
+      background: var(--bg-accent);
+      border-color: var(--border-color);
+      color: var(--text-muted);
       cursor: not-allowed;
     }
 
-    footer {
-      text-align: center;
-      padding: 3rem 2rem;
-      font-size: 0.9rem;
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .widget {
+      background: var(--bg-primary);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+    }
+
+    .widget-header {
+      padding: 1.5rem;
+      background: var(--bg-accent);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .widget-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .widget-content {
+      padding: 1.5rem;
+    }
+
+    .stats-list {
+      list-style: none;
+    }
+
+    .stats-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .stats-list li:last-child {
+      border-bottom: none;
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      background: var(--bg-accent);
       color: var(--text-secondary);
-      background: var(--white);
-      margin-top: 4rem;
-      border-top: 1px solid rgba(0,0,0,0.1);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .tag:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 0;
+      margin-top: 3rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      text-align: center;
     }
 
     .footer-content {
-      max-width: 800px;
-      margin: 0 auto;
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
 
-    .footer-heart {
-      color: #e53e3e;
-      animation: heartbeat 1.5s infinite;
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1rem;
     }
 
-    @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-color);
     }
 
     /* Responsive */
     @media (max-width: 768px) {
-      header {
-        padding: 3rem 1rem;
+      .header-container {
+        padding: 0 1rem;
+        flex-direction: column;
+        height: auto;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        gap: 1rem;
       }
-      
-      header h1 {
-        font-size: 2.5rem;
+
+      .nav-menu {
+        gap: 1rem;
       }
-      
-      header p {
-        font-size: 1.1rem;
-      }
-      
-      main {
-        padding: 0 1rem 3rem;
-        margin-top: -2rem;
-      }
-      
-      .tools-grid {
+
+      .container {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
-        margin-top: 3rem;
+        gap: 2rem;
+        padding: 2rem 1rem;
       }
-      
-      .tool-card {
+
+      .hero-section {
         padding: 2rem;
       }
-    }
 
-    /* Loading animation */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
+      .hero-title {
+        font-size: 2rem;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+
+      .tools-section {
+        padding: 1.5rem 2rem 2rem;
+      }
+
+      .tool-post:hover {
+        margin: 0;
+        padding: 2rem 0;
+        background: transparent;
       }
     }
-
-    .tool-card {
-      animation: fadeInUp 0.6s ease forwards;
-    }
-
-    .tool-card:nth-child(2) { animation-delay: 0.1s; }
-    .tool-card:nth-child(3) { animation-delay: 0.2s; }
-    .tool-card:nth-child(4) { animation-delay: 0.3s; }
   </style>
 </head>
 <body>
-
-  <header>
-    <h1><i class="fas fa-tools"></i> NamTools</h1>
-    <p>Bộ công cụ online hiện đại, nhanh chóng và tiện lợi</p>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="#" class="logo">
+        <i class="fas fa-tools"></i>
+        NamTools Blog
+      </a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#tools">Công cụ</a></li>
+          <li><a href="#guides">Hướng dẫn</a></li>
+          <li><a href="#about">Về tôi</a></li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <div class="tools-grid">
-      <div class="tool-card">
-        <div class="tool-icon">
-          <i class="fas fa-robot"></i>
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <h1 class="hero-title">Chào mừng đến với NamTools</h1>
+        <p class="hero-subtitle">
+          Chia sẻ những công cụ hữu ích, hướng dẫn chi tiết và kinh nghiệm 
+          trong lĩnh vực công nghệ và phát triển web
+        </p>
+      </section>
+
+      <!-- Tools Section -->
+      <section class="tools-section" id="tools">
+        <h2 class="section-title">
+          <i class="fas fa-wrench"></i>
+          Công cụ có sẵn
+        </h2>
+
+        <!-- Tool 1 -->
+        <article class="tool-post">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <div class="tool-content">
+              <h3>Chat Bot BHXH Support</h3>
+              <div class="tool-meta">
+                <i class="fas fa-calendar"></i> Cập nhật: 29/05/2025
+                <span>•</span>
+                <i class="fas fa-tag"></i> AI, Chatbot
+              </div>
+            </div>
+          </div>
+          <p class="tool-description">
+            Chatbot thông minh hỗ trợ tư vấn và giải đáp các thắc mắc về 
+            Bảo hiểm Xã hội. Sử dụng AI để cung cấp thông tin chính xác 
+            và nhanh chóng cho người dùng.
+          </p>
+          <a href="chatbot.html" class="tool-link">
+            <i class="fas fa-arrow-right"></i>
+            Sử dụng ngay
+          </a>
+        </article>
+
+        <!-- Tool 2 -->
+        <article class="tool-post">
+          <div class="tool-header">
+            <div class="tool-icon">
+              <i class="fas fa-search-plus"></i>
+            </div>
+            <div class="tool-content">
+              <h3>Tra cứu lịch sử KCB</h3>
+              <div class="tool-meta">
+                <i class="fas fa-calendar"></i> Cập nhật: 28/05/2025
+                <span>•</span>
+                <i class="fas fa-tag"></i> Healthcare, Beta
+              </div>
+            </div>
+          </div>
+          <p class="tool-description">
+            Công cụ tra cứu lịch sử khám chữa bệnh chi tiết và chính xác. 
+            Hiện đang trong giai đoạn thử nghiệm với nhiều tính năng 
+            mới đang được phát triển.
+          </p>
+          <a href="tracuu.html" class="tool-link">
+            <i class="fas fa-search"></i>
+            Tra cứu ngay
+          </a>
+        </article>
+
+        <!-- Tool 3 -->
+        <article class="tool-post">
+          <div class="tool-header">
+            <div class="tool-icon" style="background: #ff4757;">
+              <i class="fas fa-project-diagram"></i>
+            </div>
+            <div class="tool-content">
+              <h3>N8N Automation Server</h3>
+              <div class="tool-meta">
+                <i class="fas fa-calendar"></i> Online 24/7
+                <span>•</span>
+                <i class="fas fa-tag"></i> Automation, Workflow
+              </div>
+            </div>
+          </div>
+          <p class="tool-description">
+            Máy chủ tự động hóa workflow mạnh mẽ với N8N. Kết nối và 
+            tự động hóa các tác vụ giữa nhiều ứng dụng và dịch vụ 
+            khác nhau một cách dễ dàng.
+          </p>
+          <a href="https://n8n.namdm.io.vn" target="_blank" class="tool-link external">
+            <i class="fas fa-external-link-alt"></i>
+            Truy cập server
+          </a>
+        </article>
+
+        <!-- Tool 4 -->
+        <article class="tool-post">
+          <div class="tool-header">
+            <div class="tool-icon" style="background: #94a3b8;">
+              <i class="fas fa-hashtag"></i>
+            </div>
+            <div class="tool-content">
+              <h3>Hash Tool</h3>
+              <div class="tool-meta">
+                <i class="fas fa-calendar"></i> Sắp ra mắt
+                <span>•</span>
+                <i class="fas fa-tag"></i> Security, Hash
+              </div>
+            </div>
+          </div>
+          <p class="tool-description">
+            Công cụ tính toán hash MD5, SHA1, SHA256 cho văn bản và file. 
+            Đảm bảo an toàn và bảo mật thông tin với thuật toán mã hóa 
+            tiêu chuẩn quốc tế.
+          </p>
+          <a href="#" class="tool-link disabled">
+            <i class="fas fa-clock"></i>
+            Đang phát triển
+          </a>
+        </article>
+      </section>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- About Widget -->
+      <div class="widget">
+        <div class="widget-header">
+          <h3 class="widget-title">
+            <i class="fas fa-user"></i>
+            Về tác giả
+          </h3>
         </div>
-        <h3>Chat Bot BHXH</h3>
-        <p>Chatbot hỗ trợ tư vấn và giải đáp thông tin về Bảo hiểm Xã hội một cách nhanh chóng</p>
-        <a href="chatbot.html" class="tool-link">
-          <i class="fas fa-arrow-right"></i>
-          Sử dụng ngay
-        </a>
+        <div class="widget-content">
+          <p>Xin chào! Tôi là Nam, một developer đam mê công nghệ và luôn tìm cách tạo ra những công cụ hữu ích cho cộng đồng.</p>
+        </div>
       </div>
 
-      <div class="tool-card">
-        <div class="tool-icon">
-          <i class="fas fa-search-plus"></i>
+      <!-- Stats Widget -->
+      <div class="widget">
+        <div class="widget-header">
+          <h3 class="widget-title">
+            <i class="fas fa-chart-bar"></i>
+            Thống kê
+          </h3>
         </div>
-        <h3>Tra cứu lịch sử KCB</h3>
-        <p>Hỗ trợ tra cứu lịch sử khám chữa bệnh chi tiết và chính xác - Phiên bản thử nghiệm</p>
-        <a href="tracuu.html" class="tool-link">
-          <i class="fas fa-arrow-right"></i>
-          Tra cứu ngay
-        </a>
+        <div class="widget-content">
+          <ul class="stats-list">
+            <li>
+              <span>Tổng công cụ</span>
+              <strong>4</strong>
+            </li>
+            <li>
+              <span>Đang hoạt động</span>
+              <strong>3</strong>
+            </li>
+            <li>
+              <span>Lượt truy cập</span>
+              <strong>1,234</strong>
+            </li>
+            <li>
+              <span>Cập nhật cuối</span>
+              <strong>Hôm nay</strong>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <div class="tool-card">
-        <div class="tool-icon n8n-icon">
-          <i class="fas fa-project-diagram"></i>
+      <!-- Tags Widget -->
+      <div class="widget">
+        <div class="widget-header">
+          <h3 class="widget-title">
+            <i class="fas fa-tags"></i>
+            Tags phổ biến
+          </h3>
         </div>
-        <h3>N8N Automation Server</h3>
-        <p>Máy chủ tự động hóa workflow với N8N - Kết nối và tự động hóa các tác vụ một cách dễ dàng</p>
-        <a href="https://n8n.namdm.io.vn" target="_blank" class="tool-link n8n-link">
-          <i class="fas fa-external-link-alt"></i>
-          Truy cập server
-        </a>
-      </div>
-
-      <div class="tool-card coming-soon">
-        <div class="tool-icon">
-          <i class="fas fa-hashtag"></i>
-        </div>
-        <h3>Hash Tool</h3>
-        <p>Công cụ tính toán MD5, SHA1, SHA256 cho văn bản và file một cách an toàn và nhanh chóng</p>
-        <a href="#" class="tool-link">
-          <i class="fas fa-clock"></i>
-          Sắp ra mắt
-        </a>
-      </div>
-    </div>
-  </main>
-
-  <footer>
-    <div class="footer-content">
-      <p>© 2025 NamDM | Built with <span class="footer-heart">💙</span> and passion</p>
-      <p><i class="fas fa-code"></i> Made with modern web technologies</p>
-    </div>
-  </footer>
-
-</body>
-</html>
+        <div class="widget-content">
+          <div class="tag-cloud">
+            <a href="#" class="tag">AI</a>
+            <a href="#" class="tag">Chatbot</a>
+            <a href="#" class="tag">Healthcare</a>
+            <a href="#" class="tag">Automation</a>
+            <a href="#" class="tag">Workflow</a>
+            <a href="#" class="tag">Security</a>
+            <a href="#" class="tag">Hash</a>
+            <a href="#" class="tag">AWS</a>
