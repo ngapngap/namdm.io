@@ -2,36 +2,109 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>BHXH SUPPORT CHATBOT</title>
+  <title>Nam Chatbot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: sans-serif; background: #f7f7f7; padding: 20px; }
-    #chatbox { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    .msg { margin-bottom: 10px; }
-    .user { text-align: right; color: blue; }
-    .bot { text-align: left; color: green; }
-    input[type="text"] { width: 80%; padding: 8px; }
-    button { padding: 8px 12px; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 500px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 20px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .user {
+      align-self: flex-end;
+      background-color: #DCF8C6;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background-color: #F1F0F0;
+    }
+
+    .input-box {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      border: none;
+      padding: 15px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    button {
+      background: #0084FF;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #006bbd;
+    }
   </style>
 </head>
 <body>
 
-<div id="chatbox">
-  <div id="messages"></div>
-  <input type="text" id="userInput" placeholder="Nhập tin nhắn..." />
-  <button onclick="sendMessage()">Gửi</button>
+<div class="chat-container">
+  <div class="messages" id="messages"></div>
+  <div class="input-box">
+    <input type="text" id="userInput" placeholder="Nhập tin nhắn..." />
+    <button onclick="sendMessage()">Gửi</button>
+  </div>
 </div>
 
 <script>
-  const webhookURL = "https://your-n8n-server.com/webhook/chatbot"; // 👉 Thay bằng webhook thật của bạn
+  const webhookURL = "https://your-n8n-server.com/webhook/chatbot"; // ← Thay bằng của bạn
+
+  function appendMessage(text, sender) {
+    const msg = document.createElement("div");
+    msg.className = `message ${sender}`;
+    msg.textContent = text;
+    document.getElementById("messages").appendChild(msg);
+    msg.scrollIntoView({ behavior: "smooth" });
+  }
 
   async function sendMessage() {
     const input = document.getElementById("userInput");
     const message = input.value.trim();
     if (!message) return;
 
-    appendMessage(message, 'user');
-    input.value = '';
+    appendMessage(message, "user");
+    input.value = "";
 
     try {
       const res = await fetch(webhookURL, {
@@ -40,22 +113,13 @@
         body: JSON.stringify({ message: message })
       });
 
-      const data = await res.json(); // hoặc res.text() tùy backend
-      appendMessage(data.reply || data, 'bot');
+      const data = await res.json();
+      appendMessage(data.reply || "🤖 Không có phản hồi", "bot");
 
     } catch (err) {
-      appendMessage("⚠️ Lỗi khi gửi tin nhắn.", 'bot');
+      appendMessage("⚠️ Lỗi kết nối tới server", "bot");
       console.error(err);
     }
-  }
-
-  function appendMessage(text, sender) {
-    const messages = document.getElementById("messages");
-    const msgDiv = document.createElement("div");
-    msgDiv.className = `msg ${sender}`;
-    msgDiv.textContent = text;
-    messages.appendChild(msgDiv);
-    messages.scrollTop = messages.scrollHeight;
   }
 </script>
 
