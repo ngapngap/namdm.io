@@ -28,6 +28,7 @@
       justify-content: space-between;
       align-items: center;
       position: relative;
+      transition: background 0.2s;
     }
 
     .chatbox__headerText {
@@ -89,6 +90,7 @@
       border-radius: 15px;
       max-width: 70%;
       position: relative;
+      word-break: break-word;
     }
 
     .chatbox__message--primary {
@@ -144,7 +146,7 @@
     </div>
   </div>
 
-  <div class="chatbox__header">
+  <div class="chatbox__header" id="chatHeader">
     <div class="chatbox__headerText">
       BHXH SUPPORT CHATBOT <span class="chatbox__onlineDot"></span>
     </div>
@@ -160,9 +162,9 @@
 </div>
 
 <script>
-  let messages = [];
   let chatColor = '#0084ff';
-  const webhookURL = "https://your-n8n-server.com/webhook/chatbot"; // 🔁 Thay bằng webhook thực
+  // Thay thế đường dẫn dưới đây bằng webhook thật của bạn!
+  const webhookURL = "https://your-real-server.com/webhook/chatbot";
 
   function toggleColorPanel() {
     const panel = document.getElementById("colorPanel");
@@ -171,6 +173,7 @@
 
   function setColor(color) {
     chatColor = color;
+    document.getElementById('chatHeader').style.background = color;
     toggleColorPanel();
   }
 
@@ -209,6 +212,12 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: msg })
       });
+
+      if (!res.ok) {
+        appendMessage("⚠️ Lỗi kết nối tới server.");
+        return;
+      }
+
       const data = await res.json();
       appendMessage(data.reply || "🤖 Không có phản hồi.");
     } catch (err) {
