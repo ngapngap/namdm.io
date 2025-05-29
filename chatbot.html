@@ -1,127 +1,17 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title>Nam Chatbot</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .chat-container {
-      width: 100%;
-      max-width: 500px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .messages {
-      flex: 1;
-      padding: 15px;
-      overflow-y: auto;
-    }
-
-    .message {
-      margin: 10px 0;
-      padding: 10px 15px;
-      border-radius: 20px;
-      max-width: 80%;
-      word-wrap: break-word;
-    }
-
-    .user {
-      align-self: flex-end;
-      background-color: #DCF8C6;
-    }
-
-    .bot {
-      align-self: flex-start;
-      background-color: #F1F0F0;
-    }
-
-    .input-box {
-      display: flex;
-      border-top: 1px solid #ddd;
-    }
-
-    input[type="text"] {
-      flex: 1;
-      border: none;
-      padding: 15px;
-      font-size: 16px;
-      outline: none;
-    }
-
-    button {
-      background: #0084FF;
-      color: white;
-      border: none;
-      padding: 0 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #006bbd;
-    }
-  </style>
-</head>
-<body>
-
-<div class="chat-container">
-  <div class="messages" id="messages"></div>
-  <div class="input-box">
-    <input type="text" id="userInput" placeholder="Nhập tin nhắn..." />
-    <button onclick="sendMessage()">Gửi</button>
-  </div>
-</div>
-
-<script>
-  const webhookURL = "https://your-n8n-server.com/webhook/chatbot"; // ← Thay bằng của bạn
-
-  function appendMessage(text, sender) {
-    const msg = document.createElement("div");
-    msg.className = `message ${sender}`;
-    msg.textContent = text;
-    document.getElementById("messages").appendChild(msg);
-    msg.scrollIntoView({ behavior: "smooth" });
-  }
-
-  async function sendMessage() {
-    const input = document.getElementById("userInput");
-    const message = input.value.trim();
-    if (!message) return;
-
-    appendMessage(message, "user");
-    input.value = "";
-
-    try {
-      const res = await fetch(webhookURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: message })
-      });
-
-      const data = await res.json();
-      appendMessage(data.reply || "🤖 Không có phản hồi", "bot");
-
-    } catch (err) {
-      appendMessage("⚠️ Lỗi kết nối tới server", "bot");
-      console.error(err);
-    }
-  }
-</script>
-
-</body>
-</html>
+meta(name="viewport" content="width=device-width, initial-scale=1.0")
+#app.chatbox
+	.colorPanel(:style='{display: colorPanelShown ? "flex":"none",opacity: colorPanelShown ? "flex":"none"}')
+		.colorPanel__colorSlot(v-for='color in colors')
+			.colorPanel__color(:style='{background: color}',@click='setColor(color)')
+	.chatbox__header
+		.chatbox__headerText BHXH SUPPORT CHATBOT
+			.chatbox__onlineDot
+		.chatbox__button(v-on:click='colorPanelShown = !colorPanelShown')
+	.chatbox__messages
+		.chatbox__messageBox(v-for='message in messages',:class='{"chatbox__messageBox--primary": message.primary}')
+			.chatbox__message(:class='{"chatbox__message--primary": message.primary}',:style='{background: message.primary ? chatColor:"inital"}') {{message.text}}
+				.chatbox__tooltip.chatbox__tooltip--left {{message.date}}
+	.chatbox__inputPanel
+		input.chatbox__input(v-model='newMessage',@keyup.enter='send',placeholder='Aa')
+		.chatbox__tooltip.chatbox__tooltip--bottom(:style='{opacity: (newMessage.length > 2 && !this.tutorialSeen) ? 0.7:0}') Press enter to send the message
+		//.chatbox__button +
