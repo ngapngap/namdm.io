@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>AI Chatbot</title>
     <style>
+        /* ... (giữ nguyên phần CSS của bạn như cũ) ... */
         * {
             margin: 0;
             padding: 0;
@@ -229,11 +230,18 @@
             animation: typing 1.4s infinite ease-in-out;
         }
 
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
 
         @keyframes typing {
-            0%, 80%, 100% {
+            0%,
+            80%,
+            100% {
                 transform: scale(0.8);
                 opacity: 0.5;
             }
@@ -259,16 +267,16 @@
             body {
                 padding: 10px;
             }
-            
+
             .chat-container {
                 height: calc(100vh - 20px);
                 border-radius: 15px;
             }
-            
+
             .message {
                 max-width: 85%;
             }
-            
+
             .quick-questions {
                 padding: 0 15px 10px;
             }
@@ -326,8 +334,8 @@
         <!-- Input Container -->
         <div class="chat-input-container">
             <div class="input-wrapper">
-                <textarea 
-                    id="chatInput" 
+                <textarea
+                    id="chatInput"
                     placeholder="Nhập tin nhắn của bạn..."
                     onkeydown="handleKeyDown(event)"
                     oninput="autoResize(this)"
@@ -335,7 +343,7 @@
                 ></textarea>
                 <button id="sendBtn" onclick="sendMessage()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                     </svg>
                 </button>
             </div>
@@ -345,54 +353,54 @@
     <script>
         // Cấu hình
         const webhookURL = "https://n8n.namdm.io.vn/webhook/webchat";
-        const sessionId = 'user_' + Date.now();
+        const sessionId = "user_" + Date.now();
 
         // Khởi tạo khi trang được tải
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('chatInput').focus();
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("chatInput").focus();
         });
 
         // Hàm gửi tin nhắn chính
         function sendMessage() {
-            const input = document.getElementById('chatInput');
+            const input = document.getElementById("chatInput");
             const message = input.value.trim();
-            
+
             if (!message) return;
-            
+
             // Disable send button
-            const sendBtn = document.getElementById('sendBtn');
+            const sendBtn = document.getElementById("sendBtn");
             sendBtn.disabled = true;
-            
+
             // Add user message
             addMessage(message, true);
-            
+
             // Clear input
-            input.value = '';
-            input.style.height = 'auto';
-            
+            input.value = "";
+            input.style.height = "auto";
+
             // Hide welcome message if exists
-            const welcomeMsg = document.querySelector('.welcome-message');
+            const welcomeMsg = document.querySelector(".welcome-message");
             if (welcomeMsg) {
-                welcomeMsg.style.display = 'none';
+                welcomeMsg.style.display = "none";
             }
-            
+
             // Show typing indicator
             showTypingIndicator();
-            
+
             // Send to webhook
             sendToWebhook(message);
         }
 
         // Hàm gửi câu hỏi nhanh
         function sendQuickQuestion(question) {
-            const input = document.getElementById('chatInput');
+            const input = document.getElementById("chatInput");
             input.value = question;
             sendMessage();
         }
 
         // Hàm xử lý phím Enter
         function handleKeyDown(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
+            if (event.key === "Enter" && !event.shiftKey) {
                 event.preventDefault();
                 sendMessage();
             }
@@ -400,43 +408,43 @@
 
         // Hàm tự động điều chỉnh kích thước textarea
         function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+            textarea.style.height = "auto";
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + "px";
         }
 
         // Hàm thêm tin nhắn vào chat
         function addMessage(message, isUser) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageGroup = document.createElement('div');
-            messageGroup.className = `message-group ${isUser ? 'user' : 'bot'}`;
-            
+            const messagesContainer = document.getElementById("chatMessages");
+            const messageGroup = document.createElement("div");
+            messageGroup.className = `message-group ${isUser ? "user" : "bot"}`;
+
             const now = new Date();
-            const timestamp = now.toLocaleTimeString('vi-VN', { 
-                hour: '2-digit', 
-                minute: '2-digit' 
+            const timestamp = now.toLocaleTimeString("vi-VN", {
+                hour: "2-digit",
+                minute: "2-digit",
             });
-            
+
             messageGroup.innerHTML = `
-                <div class="avatar ${isUser ? 'user' : 'bot'}">
-                    ${isUser ? 'U' : 'AI'}
+                <div class="avatar ${isUser ? "user" : "bot"}">
+                    ${isUser ? "U" : "AI"}
                 </div>
-                <div class="message ${isUser ? 'user' : 'bot'}">
+                <div class="message ${isUser ? "user" : "bot"}">
                     ${message}
                     <div class="timestamp">${timestamp}</div>
                 </div>
             `;
-            
+
             messagesContainer.appendChild(messageGroup);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
         // Hàm hiển thị typing indicator
         function showTypingIndicator() {
-            const messagesContainer = document.getElementById('chatMessages');
-            const typingIndicator = document.createElement('div');
-            typingIndicator.className = 'message-group bot';
-            typingIndicator.id = 'typingIndicator';
-            
+            const messagesContainer = document.getElementById("chatMessages");
+            const typingIndicator = document.createElement("div");
+            typingIndicator.className = "message-group bot";
+            typingIndicator.id = "typingIndicator";
+
             typingIndicator.innerHTML = `
                 <div class="avatar bot">AI</div>
                 <div class="typing-indicator">
@@ -447,14 +455,14 @@
                     </div>
                 </div>
             `;
-            
+
             messagesContainer.appendChild(typingIndicator);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
         // Hàm xóa typing indicator
         function removeTypingIndicator() {
-            const typingIndicator = document.getElementById('typingIndicator');
+            const typingIndicator = document.getElementById("typingIndicator");
             if (typingIndicator) {
                 typingIndicator.remove();
             }
@@ -464,50 +472,53 @@
         async function sendToWebhook(message) {
             try {
                 const response = await fetch(webhookURL, {
-                    method: 'POST',
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
                         message: message,
                         sessionId: sessionId,
-                        timestamp: new Date().toISOString()
-                    })
+                        timestamp: new Date().toISOString(),
+                    }),
                 });
-                
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                
+
                 const data = await response.json();
-                
+
                 // Remove typing indicator
                 removeTypingIndicator();
-                
-                // Add bot response
-                if (data && data.response) {
-                    addMessage(data.response, false);
+
+                // Add bot response (đã sửa)
+                if (data && data.reply) {
+                    addMessage(data.reply, false);
                 } else {
-                    addMessage("Xin lỗi, tôi không thể trả lời câu hỏi này. Vui lòng thử lại sau.", false);
+                    addMessage(
+                        "Xin lỗi, tôi không thể trả lời câu hỏi này. Vui lòng thử lại sau.",
+                        false
+                    );
                 }
-                
             } catch (error) {
-                console.error('Error:', error);
+                console.error("Error:", error);
                 removeTypingIndicator();
-                
+
                 // Simulate bot response for demo
                 setTimeout(() => {
                     const responses = [
                         "Cảm ơn bạn đã gửi tin nhắn! Tôi là AI assistant và sẵn sàng giúp bạn.",
                         "Xin chào! Tôi có thể giúp bạn trả lời các câu hỏi, cung cấp thông tin hoặc hỗ trợ giải quyết vấn đề.",
-                        "Rất vui được trò chuyện với bạn! Bạn có thể hỏi tôi bất cứ điều gì."
+                        "Rất vui được trò chuyện với bạn! Bạn có thể hỏi tôi bất cứ điều gì.",
                     ];
-                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    const randomResponse =
+                        responses[Math.floor(Math.random() * responses.length)];
                     addMessage(randomResponse, false);
                 }, 1000);
             } finally {
                 // Re-enable send button
-                document.getElementById('sendBtn').disabled = false;
+                document.getElementById("sendBtn").disabled = false;
             }
         }
     </script>
